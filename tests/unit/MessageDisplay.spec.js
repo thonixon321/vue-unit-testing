@@ -14,12 +14,21 @@ beforeEach(() => {
 })
 
 describe('MessageDisplay', () => {
+  it('Renders MessageDisplay component correctly', () => {
+    const wrapper = mount(MessageDisplay)
+    //snapshot example here, this will take a copy of the component on initial
+    //render, and if something changes in the component afterwards, this snapshot
+    //will let us know - either the change was expected and we need to update
+    //this test (regenerate snapshots with: jest -u in terminal), or it was unexpected and we need to fix the component
+    expect(wrapper.element).toMatchSnapshot()
+  })
+
   it('Calls getMessage and displays message', async () => {
      const mockMessage = 'Hello from the db'
      //mock the getMessage api call that resolves to a value we expect the api to return
      getMessage.mockResolvedValueOnce({ text: mockMessage }) // calling our mocked get request
      const wrapper = mount(MessageDisplay)
-      // wait for promise to resolve (con't access the aysnc in the MessageDisplay.vue file, so we use the 3rd party plugin flushPromises to await this mock api call to finish and return a value - resolves promises and then we can go onto assertions)
+      // wait for promise to resolve (can't access the aysnc in the MessageDisplay.vue file, so we use the 3rd party plugin flushPromises to await this mock api call to finish and return a value - resolves promises and then we can go onto assertions)
       await flushPromises()
       // check that call happened once
       expect(getMessage).toHaveBeenCalledTimes(1)
